@@ -68,6 +68,10 @@ function getViewerConfiguration() {
         "editorStampParamsToolbar"
       ),
       download: document.getElementById("download"),
+      openFile: document.getElementById("openFile"),
+      openLink: document.getElementById("openLink"),
+      openLinkButton: document.getElementById("openLinkButton"),
+      saveToImage: document.getElementById("saveToImage"),
     },
     secondaryToolbar: {
       toolbar: document.getElementById("secondaryToolbar"),
@@ -79,6 +83,9 @@ function getViewerConfiguration() {
           : null,
       printButton: document.getElementById("secondaryPrint"),
       downloadButton: document.getElementById("secondaryDownload"),
+      saveToImageButton: document.getElementById("secondarySaveToImage"),
+      openLinkButton: document.getElementById("secondaryOpenLink"),
+      closeOpenLinkButton: document.getElementById("closeOpenLinkButton"),
       viewBookmarkButton: document.getElementById("viewBookmark"),
       firstPageButton: document.getElementById("firstPage"),
       lastPageButton: document.getElementById("lastPage"),

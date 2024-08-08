@@ -98,6 +98,8 @@
   --toolbarButton-openFile-icon: url(images/toolbarButton-openFile.svg);
   /*#endif*/
   --toolbarButton-download-icon: url(images/toolbarButton-download.svg);
+  --toolbarButton-saveToImage-icon: url(images/toolbarButton-saveToImage.svg);
+  --toolbarButton-openLink-icon: url(images/toolbarButton-openLink.svg);
   --toolbarButton-bookmark-icon: url(images/toolbarButton-bookmark.svg);
   --toolbarButton-viewThumbnail-icon: url(images/toolbarButton-viewThumbnail.svg);
   --toolbarButton-viewOutline-icon: url(images/toolbarButton-viewOutline.svg);
@@ -592,20 +594,38 @@ body {
   margin-bottom: -4px;
 }
 
+#openLinkInputContainer {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  transform: translate(-50%, -50%);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+}
+
+#closeOpenLinkButton,
+#openLinkButton {
+  margin-left: 8px;
+  padding: 0 5px;
+  cursor: pointer;
+}
+
 #editorStampParamsToolbar {
-  inset-inline-end: calc(var(--editor-toolbar-base-offset) + 0px);
+  inset-inline-end: calc(var(--editor-toolbar-base-offset) + 90px);
 }
 
 #editorInkParamsToolbar {
-  inset-inline-end: calc(var(--editor-toolbar-base-offset) + 28px);
+  inset-inline-end: calc(var(--editor-toolbar-base-offset) + 118px);
 }
 
 #editorFreeTextParamsToolbar {
-  inset-inline-end: calc(var(--editor-toolbar-base-offset) + 56px);
+  inset-inline-end: calc(var(--editor-toolbar-base-offset) + 146px);
 }
 
 #editorHighlightParamsToolbar {
-  inset-inline-end: calc(var(--editor-toolbar-base-offset) + 84px);
+  inset-inline-end: calc(var(--editor-toolbar-base-offset) + 174px);
 }
 
 #editorStampAddImage::before {
@@ -944,13 +964,21 @@ body {
 }
 
 /*#if GENERIC*/
-#secondaryOpenFile::before {
+:is(#openFile, #secondaryOpenFile)::before {
   mask-image: var(--toolbarButton-openFile-icon);
 }
 /*#endif*/
 
 :is(#download, #secondaryDownload)::before {
   mask-image: var(--toolbarButton-download-icon);
+}
+
+:is(#openLink, #secondaryOpenLink)::before {
+  mask-image: var(--toolbarButton-openLink-icon);
+}
+
+:is(#saveToImage, #secondarySaveToImage)::before {
+  mask-image: var(--toolbarButton-saveToImage-icon);
 }
 
 a.secondaryToolbarButton {

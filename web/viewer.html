@@ -85,7 +85,9 @@ See https://github.com/adobe-type-tools/cmap-resources
           "web-preferences": "./genericcom.js",
           "web-print_service": "./pdf_print_service.js",
           "web-secondary_toolbar": "./secondary_toolbar.js",
-          "web-toolbar": "./toolbar.js"
+          "web-toolbar": "./toolbar.js",
+          "jszip": "./third-library/jszip.min.js",
+          "FileSaver": "./third-library/FileSaver.min.js"
         }
       }
     </script>
@@ -174,6 +176,18 @@ See https://github.com/adobe-type-tools/cmap-resources
           </div>
         </div>  <!-- findbar -->
 
+        <form class="editorParamsToolbar hidden" id="openLinkInputContainer">
+          <span class="loadingInput end">
+            <input name="file" id="openLinkInput" class="toolbarField" placeholder="input pdf file link" tabindex="91" data-l10n-id="pdfjs-open-link-input" aria-invalid="false">
+          </span>
+          <button id="openLinkButton" type="submit" tabindex="92">
+            <span data-l10n-id="pdfjs-open-link-button-label">Open</span>
+          </button>
+          <button id="closeOpenLinkButton" type="button" tabindex="92">
+            <span data-l10n-id="pdfjs-close-open-link-button-label">Close</span>
+          </button>
+        </form>
+
         <div class="editorParamsToolbar hidden doorHangerRight" id="editorHighlightParamsToolbar">
           <div id="highlightParamsToolbarContainer" class="editorParamsToolbarContainer">
             <div id="editorHighlightColorPicker" class="colorPicker">
@@ -239,6 +253,9 @@ See https://github.com/adobe-type-tools/cmap-resources
             <button id="secondaryOpenFile" class="secondaryToolbarButton" type="button" title="Open File" tabindex="51" data-l10n-id="pdfjs-open-file-button">
               <span data-l10n-id="pdfjs-open-file-button-label">Open</span>
             </button>
+            <button id="secondaryOpenLink" class="secondaryToolbarButton" type="button" title="Open Link" tabindex="51" data-l10n-id="pdfjs-open-link-button">
+              <span data-l10n-id="pdfjs-open-link-button-label">Open Link</span>
+            </button>
 <!--#endif-->
 
             <button id="secondaryPrint" class="secondaryToolbarButton visibleMediumView" type="button" title="Print" tabindex="52" data-l10n-id="pdfjs-print-button">
@@ -247,6 +264,10 @@ See https://github.com/adobe-type-tools/cmap-resources
 
             <button id="secondaryDownload" class="secondaryToolbarButton visibleMediumView" type="button" title="Save" tabindex="53" data-l10n-id="pdfjs-save-button">
               <span data-l10n-id="pdfjs-save-button-label">Save</span>
+            </button>
+
+            <button id="secondarySaveToImage" class="secondaryToolbarButton visibleMediumView" type="button" title="Save To Image" tabindex="71" data-l10n-id="pdfjs-save-to-image-button">
+              <span data-l10n-id="pdfjs-save-to-image-button-label">Save To Image</span>
             </button>
 
 <!--#if GENERIC-->
@@ -379,12 +400,24 @@ See https://github.com/adobe-type-tools/cmap-resources
 
                 <div id="editorModeSeparator" class="verticalToolbarSeparator"></div>
 
+                <button id="openFile" class="toolbarButton hiddenMediumView" type="button" title="Open File" tabindex="41" data-l10n-id="pdfjs-open-file-button">
+                  <span data-l10n-id="pdfjs-open-file-button-label">Open</span>
+                </button>
+
+                <button id="openLink" class="toolbarButton hiddenMediumView" type="button" title="Open Link" tabindex="41" data-l10n-id="pdfjs-open-link-button">
+                  <span data-l10n-id="pdfjs-open-link-button-label">Open Link</span>
+                </button>
+
                 <button id="print" class="toolbarButton hiddenMediumView" type="button" title="Print" tabindex="41" data-l10n-id="pdfjs-print-button">
                   <span data-l10n-id="pdfjs-print-button-label">Print</span>
                 </button>
 
                 <button id="download" class="toolbarButton hiddenMediumView" type="button" title="Save" tabindex="42" data-l10n-id="pdfjs-save-button">
                   <span data-l10n-id="pdfjs-save-button-label">Save</span>
+                </button>
+
+                <button id="saveToImage" class="toolbarButton hiddenMediumView" type="button" title="Save" tabindex="42" data-l10n-id="pdfjs-save-to-image-button">
+                  <span data-l10n-id="pdfjs-save-to-image-button-label">Save To Image</span>
                 </button>
 
                 <div class="verticalToolbarSeparator hiddenMediumView"></div>

@@ -257,7 +257,12 @@ function createWebpackAlias(defines) {
     viewerAlias["web-print_service"] = "web/firefox_print_service.js";
   }
 
-  const alias = { ...basicAlias, ...libraryAlias, ...viewerAlias };
+  const thirdLibraryAlias = {
+    "jszip": "web/third-library/jszip.min.js",
+    "FileSaver": "web/third-library/FileSaver.min.js",
+  }
+
+  const alias = { ...basicAlias, ...libraryAlias, ...viewerAlias, ...thirdLibraryAlias };
   for (const key in alias) {
     alias[key] = path.join(__dirname, alias[key]);
   }
@@ -2018,14 +2023,14 @@ gulp.task(
 gulp.task(
   "server",
   gulp.parallel(
-    function watchLocale() {
+    async function watchLocale() {
       gulp.watch(
         "l10n/**/*.ftl",
         { ignoreInitial: false },
         gulp.series("locale")
       );
     },
-    function watchDevSandbox() {
+    async function watchDevSandbox() {
       gulp.watch(
         [
           "src/pdf.{sandbox,sandbox.external,scripting}.js",
@@ -2053,7 +2058,7 @@ gulp.task(
       }
 
       const { WebServer } = await import("./test/webserver.mjs");
-      const server = new WebServer({ port });
+      const server = new WebServer({ host: "127.0.0.1", port });
       server.start();
     }
   )

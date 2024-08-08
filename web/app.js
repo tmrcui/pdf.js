@@ -89,6 +89,8 @@ import { Preferences } from "web-preferences";
 import { SecondaryToolbar } from "web-secondary_toolbar";
 import { Toolbar } from "web-toolbar";
 import { ViewHistory } from "./view_history.js";
+import "jszip";
+import "FileSaver";
 
 const FORCE_PAGES_LOADED_TIMEOUT = 10000; // ms
 
@@ -1162,6 +1164,56 @@ const PDFViewerApplication = {
     classList.remove("wait");
   },
 
+  async toggleOpenLink() {
+    const dialog = document.querySelector('#openLinkInputContainer')
+    const CLASS_NAME_HIDDEN = 'hidden'
+    const hidden = dialog.classList.contains(CLASS_NAME_HIDDEN)
+
+    if (hidden) {
+      dialog.classList.remove(CLASS_NAME_HIDDEN)
+    } else {
+      dialog.classList.add(CLASS_NAME_HIDDEN)
+    }
+  },
+
+  async openLink() {
+    console.log('openLink')
+  },
+
+  async saveToImage() {
+    console.log('123')
+    const { classList } = this.appConfig.appContainer;
+    classList.add("wait");
+    let doc = this.pdfDocument
+
+    if (this.pdfDocument?.annotationStorage.size > 0) {
+      const data = await this.pdfDocument.saveDocument();
+      doc = await getDocument({
+        ...AppOptions.getAll(OptionKind.API),
+        data
+      }).promise;
+    }
+
+    const pages = await Promise.all(new Array(doc.numPages).fill(undefined).map(async (_, i) => {
+      const page = await doc.getPage(i + 1)
+      const viewport = page.getViewport({scale: 1.5})
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')
+      canvas.width = viewport.width
+      canvas.height = viewport.height
+      const task = page.render({canvasContext: ctx, viewport: viewport})
+      await task.promise
+      return new Promise((resolve) => canvas.toBlob(resolve))
+    }))
+
+    const zip = new JSZip();
+    pages.forEach((imgData, i) => zip.file(`page_${i + 1}.png`, imgData, { binary: true }))
+
+    const content = await zip.generateAsync({ type: "blob" })
+    saveAs(content, "images.zip");
+    classList.remove("wait");
+  },
+
   /**
    * Report the error; used for errors affecting loading and/or parsing of
    * the entire PDF document.
@@ -1932,6 +1984,8 @@ const PDFViewerApplication = {
     );
     eventBus._on("print", this.triggerPrinting.bind(this), { signal });
     eventBus._on("download", this.downloadOrSave.bind(this), { signal });
+    eventBus._on("savetoimage", this.saveToImage.bind(this), { signal });
+    eventBus._on("toggleopenlink", this.toggleOpenLink.bind(this), { signal });
     eventBus._on("firstpage", () => (this.page = 1), { signal });
     eventBus._on("lastpage", () => (this.page = this.pagesCount), { signal });
     eventBus._on("nextpage", () => pdfViewer.nextPage(), { signal });
@@ -2250,7 +2304,7 @@ if (typeof PDFJSDev === "undefined" || PDFJSDev.test("GENERIC")) {
       // Removing of the following line will not guarantee that the viewer will
       // start accepting URLs from foreign origin -- CORS headers on the remote
       // server must be properly configured.
-      if (fileOrigin !== viewerOrigin) {
+      if (false && fileOrigin !== viewerOrigin) {
         throw new Error("file origin does not match viewer's");
       }
     } catch (ex) {
